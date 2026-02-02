@@ -1,5 +1,5 @@
 trigger: none
-pool: Avyan-pool
+pool: avyan2
 
 steps:
 - task: TerraformInstaller@1
