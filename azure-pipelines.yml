@@ -1,0 +1,33 @@
+trigger: none
+pool:Avyan-pool
+
+steps:
+- task: TerraformInstaller@1
+  inputs:
+    terraformVersion: 'latest'
+
+- task: TerraformTask@5
+  inputs:
+    provider: 'azurerm'
+    command: 'init'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/'
+    backendServiceArm: 'SC-Avyan'
+    backendAzureRmOverrideSubscriptionID: 'b13ceb2b-f9a7-46ff-acbf-11ea20df98f4'
+    backendAzureRmStorageAccountName: 'stgavyan'
+    backendAzureRmContainerName: 'avyancontainer'
+    backendAzureRmKey: 'terraform.tfstate'
+
+- task: TerraformTask@5
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/'
+    environmentServiceNameAzureRM: 'SC-Avyan'
+
+- task: TerraformTask@5
+  inputs:
+    provider: 'azurerm'
+    command: 'apply'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/'
+    commandOptions: '-auto-approve'
+    environmentServiceNameAzureRM: 'SC-Avyan'
