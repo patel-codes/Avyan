@@ -1,0 +1,29 @@
+trigger: none
+pool: avyan2
+
+steps: 
+- task: TerraformInstaller@1
+  inputs:
+    terraformVersion: 'latest'
+
+- task: TerraformTask@5
+  inputs:
+    provider: 'azurerm'
+    command: 'init'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/'
+    backendServiceArm: 'SCVAvyan2'
+    backendAzureRmStorageAccountName: 'stgavyan'
+    backendAzureRmContainerName: 'avyancontainer'
+    backendAzureRmKey: 'step.tfstate'
+- task: TerraformTask@5
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/'
+    environmentServiceNameAzureRM: 'SCVAvyan2'
+- task: TerraformTask@5
+  inputs:
+    provider: 'azurerm'
+    command: 'apply'
+    commandOptions: '-auto-approve'
+    environmentServiceNameAzureRM: 'SCVAvyan2'
